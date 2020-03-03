@@ -1,0 +1,35 @@
+Readout Application (receive+buffer data, create TPs, send TPs, receive
+requests, send data)
+
+Simplified Readout Application (receive data, store them either sampled
+ot on data header flag)
+
+FE control applicaiton
+
+PM flusher
+
+TimingApplication (Timing Primitives generation, control of partition
+timing)
+
+ML TD
+
+ML local processor
+
+TC generator (one of TP receivers)
+
+DFO
+
+Event Builder (incl TR logger?)
+
+TP logger (TP receiver)
+
+HLF
+
+TR manager (dispatcher, colelctor)
+
+Data monitoring application
+
+ 
+
+ 
+
