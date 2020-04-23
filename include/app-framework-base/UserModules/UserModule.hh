@@ -37,7 +37,7 @@ class UserModule {
      * within the UserModule and return their result. Non-accepted commands should return a status indicating
      * this result.
      */
-    virtual std::future<std::string> execute_command(std::string cmd) = 0;
+    virtual std::string execute_command(const std::string& cmd) = 0;
 };
 }  // namespace appframework
 
