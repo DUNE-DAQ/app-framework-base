@@ -18,6 +18,8 @@
 #include <string>
 #include <future>
 
+#include "app-framework-base/UserModules/UserModuleState.hh"
+
 namespace appframework {
 /**
  * @brief The UserModule class is a set of code which performs a specific task.
@@ -38,6 +40,13 @@ class UserModule {
      * this result.
      */
     virtual std::future<std::string> execute_command(std::string cmd) = 0;
+
+    UserModuleState State() const noexcept { return fState.load() ; }
+
+  protected:
+    std::atomic<UserModuleState> fState = UserModuleState::kUnknown ;
+  
+
 };
 }  // namespace appframework
 
