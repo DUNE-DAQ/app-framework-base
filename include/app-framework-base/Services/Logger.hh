@@ -246,10 +246,7 @@ ERS_REGISTER_OUTPUT_STREAM( ers::erstraceStream, "erstrace", ERS_EMPTY )    // l
 #               pragma GCC system_header
 #       endif
 #undef  TLOG
-#define TLOG(...)          TRACE_STREAMER( tlog_LVL( __VA_ARGS__,need_at_least_one)+3\
-										  ,tlog_ARG2(__VA_ARGS__,0,need_at_least_one) \
-										  ,tlog_ARG3(__VA_ARGS__,0,"",need_at_least_one) \
-										  ,1, SL_FRC(tlog_LVL( __VA_ARGS__,need_at_least_one)) )
+
 #undef ERS_INFO
 #undef ERS_LOG
 #undef ERS_DEBUG
