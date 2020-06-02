@@ -237,6 +237,18 @@ ERS_REGISTER_OUTPUT_STREAM( ers::erstraceStream, "erstrace", ERS_EMPTY )    // l
 
 
 
+#define LOG0()              
+#define LOG1(value)            value,
+#define LOG2(value, value1)    value , value1,
+#define COMMA_IF_PARENS(...)  ,
+#define LPAREN                (
+#define EXPAND(...)           __VA_ARGS__
+#define CHOOSE(...)           EXPAND(LOG LPAREN \
+									 __VA_ARGS__ COMMA_IF_PARENS __VA_ARGS__ COMMA_IF_PARENS __VA_ARGS__ (), \
+									 LOG2, impossible, LOG2, LOG1, LOG0, LOG1, ))
+#define LOG(a0, a1, a2, a3, a4, a5, arg, ...) arg
+#define _tlog_ARG2( a1,a2,...)    tlog_ARG2(a1,a2,__VA_ARGS__)
+#define _tlog_ARG3( a1,a2,a3,...) tlog_ARG3(a1,a2,a3,__VA_ARGS__)
 //  The following use gnu extension of "##" connecting "," with empty __VA_ARGS__
 //  which eats "," when __VA_ARGS__ is empty.
 //      pragma GCC diagnostic ignored "-Wvariadic-macros" // doesn't seem to work.
@@ -246,22 +258,22 @@ ERS_REGISTER_OUTPUT_STREAM( ers::erstraceStream, "erstrace", ERS_EMPTY )    // l
 #       if (__cplusplus < 201709L)
 #               pragma GCC system_header
 #       endif
-#undef  TLOG
+//#undef  TLOG
 
 #undef ERS_INFO
 #undef ERS_LOG
 #undef ERS_DEBUG
-#define ERS_INFO(...)      TRACE_STREAMER( TLVL_INFO+3\
-										  ,tlog_ARG2(not_used, ##__VA_ARGS__,0,need_at_least_one) \
-										  ,tlog_ARG3(not_used, ##__VA_ARGS__,0,"",need_at_least_one) \
-										  ,1, SL_FRC(TLVL_INFO) )
-#define ERS_LOG(...)       TRACE_STREAMER( TLVL_LOG+3\
-										  ,tlog_ARG2(not_used, ##__VA_ARGS__,0,need_at_least_one) \
-										  ,tlog_ARG3(not_used, ##__VA_ARGS__,0,"",need_at_least_one) \
-										  ,1, SL_FRC(TLVL_LOG) )
-#define ERS_DEBUG(lvl,...) TRACE_STREAMER( TLVL_DEBUG+lvl+3\
-										  ,tlog_ARG2(not_used, ##__VA_ARGS__,0,need_at_least_one) \
-										  ,tlog_ARG3(not_used, ##__VA_ARGS__,0,"",need_at_least_one) \
-										  ,1, SL_FRC(TLVL_DEBUG+lvl) )
+#define ERS_INFO(...)      TRACE_STREAMER(TLVL_INFO+3,					\
+										  _tlog_ARG2(not_used, CHOOSE(__VA_ARGS__)(__VA_ARGS__) 0,need_at_least_one), \
+										  _tlog_ARG3(not_used, CHOOSE(__VA_ARGS__)(__VA_ARGS__) 0,"",need_at_least_one), \
+										  1, SL_FRC(TLVL_INFO) )
+#define ERS_LOG(...)       TRACE_STREAMER(TLVL_LOG+3,					\
+										  _tlog_ARG2(not_used, CHOOSE(__VA_ARGS__)(__VA_ARGS__) 0,need_at_least_one), \
+										  _tlog_ARG3(not_used, CHOOSE(__VA_ARGS__)(__VA_ARGS__) 0,"",need_at_least_one), \
+										  1, SL_FRC(TLVL_LOG) )
+#define ERS_DEBUG(lvl,...) TRACE_STREAMER(TLVL_DEBUG+lvl+3,			\
+										  tlog_ARG2(not_used, ##__VA_ARGS__,0,need_at_least_one), \
+										  tlog_ARG3(not_used, ##__VA_ARGS__,0,"",need_at_least_one), \
+										  1, SL_FRC(TLVL_DEBUG+lvl) )
 
 #endif // APP_FRAMEWORK_BASE_INCLUDE_APP_FRAMEWORK_BASE_SERVICES_LOGGER_HH_
